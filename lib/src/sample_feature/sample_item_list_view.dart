@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../settings/settings_view.dart';
+import 'data_fetcher.dart';
 import 'sample_item.dart';
 import 'sample_item_details_view.dart';
 
@@ -14,6 +14,10 @@ class SampleItemListView extends StatelessWidget {
   static const routeName = '/';
 
   final List<SampleItem> items;
+
+  Future<String> fetchArticles() async {
+    return DataFetcher().fetchRssFeed();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,31 +43,40 @@ class SampleItemListView extends StatelessWidget {
       // In contrast to the default ListView constructor, which requires
       // building all Widgets up front, the ListView.builder constructor lazily
       // builds Widgets as they’re scrolled into view.
-      body: ListView.builder(
-        // Providing a restorationId allows the ListView to restore the
-        // scroll position when a user leaves and returns to the app after it
-        // has been killed while running in the background.
-        restorationId: 'sampleItemListView',
-        itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = items[index];
+      body: FutureBuilder<String>(
+          future: fetchArticles(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print(snapshot.data);
+            }
+            return ListView.builder(
+              // Providing a restorationId allows the ListView to restore the
+              // scroll position when a user leaves and returns to the app after it
+              // has been killed while running in the background.
+              restorationId: 'sampleItemListView',
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = items[index];
 
-          return ListTile(
-              title: Text('SampleItem ${item.id}'),
-              leading: const CircleAvatar(
-                // Display the Flutter Logo image asset.
-                foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SampleItemDetailsView(item: item),
-                  ),
-                );
-              });
-        },
-      ),
+                return ListTile(
+                    title: Text('SampleItem ${item.id}'),
+                    leading: const CircleAvatar(
+                      // Display the Flutter Logo image asset.
+                      foregroundImage:
+                          AssetImage('assets/images/flutter_logo.png'),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SampleItemDetailsView(item: item),
+                        ),
+                      );
+                    });
+              },
+            );
+          }),
     );
   }
 }
