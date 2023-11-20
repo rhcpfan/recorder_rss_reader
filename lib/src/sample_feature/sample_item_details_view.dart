@@ -15,7 +15,7 @@ class SampleItemDetailsView extends StatelessWidget {
         title: const Text('Item Details'),
       ),
       body: Center(
-        child: Text('More Information about ${item.id} here'),
+        child: Text('More Information about ${item.title} here'),
       ),
     );
   }

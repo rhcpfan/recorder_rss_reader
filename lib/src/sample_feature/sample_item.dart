@@ -1,6 +1,7 @@
 /// A placeholder class that represents an entity or model.
 class SampleItem {
-  const SampleItem(this.id);
+  const SampleItem(this.title, this.content);
 
-  final int id;
+  final String title;
+  final String content;
 }
