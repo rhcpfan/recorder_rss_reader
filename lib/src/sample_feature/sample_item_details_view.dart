@@ -16,8 +16,10 @@ class SampleItemDetailsView extends StatelessWidget {
         title: Text(item.title),
       ),
       body: Center(
-        child: Html(
-          data: item.content,
+        child: SingleChildScrollView(
+          child: Html(
+            data: item.content,
+          ),
         ),
       ),
     );
